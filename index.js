@@ -28,7 +28,7 @@
  */
 
 class Musician {
-  count = 0;
+  static count = 0;
   #name;
   #instrument;
   // статичне поле count, яке відслідковує кількість музикантів, початкове значення 0
@@ -37,7 +37,7 @@ class Musician {
   constructor(name, instrument) {
     this.#name = name;
     this.#instrument = instrument;
-    count += 1;
+    Musician.count++;
     // Конструктор приймає два параметри: name та instrument
     // присвоєння вхідного значення name до приватного поля #name
     // присвоєння вхідного значення instrument до приватного поля #instrument
@@ -45,13 +45,13 @@ class Musician {
   }
 
   get name() {
-    return `${this.#name}`;
+    return this.#name;
     // гетер для приватного поля #name
     // повертає значення приватного поля #name
   }
 
   get instrument() {
-    return `${this.#instrument}`;
+    return this.#instrument;
     // гетер для приватного поля #instrument
     // повертає значення приватного поля #instrument
   }
@@ -116,14 +116,14 @@ class Guitarist extends Musician {
   }
 
   get band() {
-    return `${this.#band};`;
+    return this.#band;
   }
 
   set band(newBand) {
     this.#band = newBand;
   }
 
-  joinBand() {
+  joinBand(band) {
     this.#band = band;
   }
 
@@ -186,14 +186,14 @@ class Bassist extends Musician {
   }
 
   get band() {
-    return `${this.#band};`;
+    return this.#band;
   }
 
   set band(newBand) {
     this.#band = newBand;
   }
 
-  joinBand() {
+  joinBand(band) {
     this.#band = band;
   }
 
@@ -215,7 +215,7 @@ class Bassist extends Musician {
 }
 
 Object.defineProperty(Musician.prototype, `band`, {
-  set() {
+  set: function (newBand) {
     this.band = newBand;
   },
 });
@@ -242,31 +242,31 @@ class Band {
   #members;
   constructor(name, members) {
     this.#name = name;
-    this.#members = Musician.prototype;
+    this.#members = [...members];
   }
 
   get name() {
-    return `${this.#name};`;
+    return this.#name;
   }
 
   get members() {
-    return `${this.#members};`;
+    return this.#members;
   }
 
   set name(newName) {
     this.#name = newName;
   }
 
-  addMember() {
-    if (Musician instanceof newMember) {
-      Musician.band;
-      this.#members += member;
+  addMember(newMember) {
+    if (newMember instanceof Musician) {
+      newMember.band = this.#name;
+      this.#members.push(newMember);
     } else {
       console.log("Новий учасник повинен бути екземпляром класу Musician");
     }
   }
   playMusic() {
-    this.#members.forEach((members) => this.members.play());
+    this.#members.forEach((member) => member.play());
   }
   /*
    * Створюємо конструктор з двома вхідними параметрами: #name і #members
@@ -303,15 +303,15 @@ class Performance {
   }
 
   get band() {
-    return `${this.#band};`;
+    return this.#band;
   }
 
   get location() {
-    return `${this.#location};`;
+    return this.#location;
   }
 
   get date() {
-    return `${this.#date};`;
+    return this.#date;
   }
 
   info() {
@@ -342,16 +342,14 @@ class Performance {
 class Concert extends Performance {
   #ticketPrice;
   constructor(band, location, date, ticketPrice) {
-    this.#band = band;
-    this.#location = location;
-    this.#date = date;
+    super(band, location, date);
     this.#ticketPrice = ticketPrice;
   }
   get ticketPrice() {
-    return `${this.#ticketPrice};`;
+    return this.#ticketPrice;
   }
-  set ticketPrice(number) {
-    this.#ticketPrice = number;
+  set ticketPrice(newPrice) {
+    this.#ticketPrice = newPrice;
   }
   info() {
     console.log(
@@ -385,11 +383,11 @@ class Vocalist {
   }
 
   get name() {
-    return `${this.#name};`;
+    return this.#name;
   }
 
   get band() {
-    return `${this.#band};`;
+    return this.#band;
   }
 
   set name(newName) {
@@ -427,11 +425,11 @@ class SongWriter {
   }
 
   get songs() {
-    return `${this.#songs};`;
+    return this.#songs;
   }
 
   addSong(song) {
-    this.#songs.add(song);
+    this.#songs.push(song);
   }
 
   info() {
